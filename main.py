@@ -31,6 +31,7 @@ def uploadFiles():
            file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
           # set the file path
            uploaded_file.save(file_path)
+          # call csvParser() function by passing file path
            csvParser(file_path)
           # save the file
       return redirect(url_for('result'))
@@ -38,14 +39,17 @@ def uploadFiles():
 #Result page
 @app.route("/result")
 def result():
-     # Set The upload HTML template '\templates\index.html'
+     # Set The result HTML template '\templates\result.html'
     return render_template('result.html',data=result_list)
       
     
 # importing pandas 
 import pandas as pd   
 
+# The csvParser() function checks whether the file is .CSV type using a try except block. If it is a .CSV file, it then counts the rows and columns and checks if there are 10 rows and 3 columns.
+# Then it checks if every cell has data to declare whether it is complete or incomplete.
 def csvParser(filepath):
+    # try block to check if file is .CSV. If not, exception is thrown and handled to return appropriate message.
     try:
         # importing csv file 
         df = pd.read_csv(filepath, header=None) 
@@ -85,7 +89,7 @@ def csvParser(filepath):
     
 
 if (__name__ == "__main__"):
-     app.run(port = 5000)
+     app.run(port = 5000, host = '0.0.0.0')
    
 
 
